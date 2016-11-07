@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	  <meta charset="utf-8">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	  <title>CG-DEMO</title>
+
+	  <meta name="CG Demo" content="A demo of the final project of CG">
+
+	  <script src="lib/three.min.js"></script>
+
+	  <link rel="icon" href="img/icon.png"/>
+	  <link rel="stylesheet" href="style/index.css">
+	</head>
+	<body>
+  		<canvas id="heightmap"></canvas>
+  		<script src="js/island.js"></script>
+  		<canvas id="scene"></canvas>
+  		<div id="controls"></div>
+
+  		<script src="lib/OrbitControls.js"></script>
+  		<script>
+  			var controls = new THREE.OrbitControls( camera, renderer.domElement );
+			controls.target.set( 0, 1, 0 );
+			controls.update();
+  		</script>
+	</body>
+</html>

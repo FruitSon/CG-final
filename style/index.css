@@ -1,0 +1,29 @@
+html, body {
+  font-size: 1em;
+  line-height: 1.4;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+}
+canvas {
+/*  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-touch-callout: none;*/
+  background-color: black;
+  display: block;
+  margin: 0 auto;
+  user-select: none;
+}
+#heightmap {
+  border: 1px solid #AAAAAA;
+  height: 128px;
+  width: 128px;
+  left: 20px;
+  position: absolute;
+  top: 20px;
+  background-color: black;
+  z-index: 3;
+}
