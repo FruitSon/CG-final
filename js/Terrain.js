@@ -87,6 +87,7 @@ function Terrain(scene) {
 		light.castShadow = true;
 		light.receiveShadow = true;
 		helper = new THREE.CameraHelper( light.shadow.camera );
+		//reference: https://threejs.org/docs/api/materials/MeshPhongMaterial.html
 		material = new THREE.MeshPhongMaterial({ color: 0xffffff, specular: 0xffffff, shininess: 0, shading: THREE.SmoothShading, wireframe:false});
 		mesh = new THREE.Mesh(geometry,material);
 
