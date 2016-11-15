@@ -11,18 +11,14 @@ function init() {
 	camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
 	// camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 1, 1000 );
 	// camera.position.z = 400;
-	camera.position.y = 10000;
+	camera.position.y = 5000;
 	scene = new THREE.Scene();
 
-	// var texture = new THREE.TextureLoader().load( 'img/3.gif' );
-	// var geometry = new THREE.BoxBufferGeometry( 200, 200, 200 );
-	// var material = new THREE.MeshBasicMaterial( { map: texture } );
-	// mesh = new THREE.Mesh( geometry );
-	// scene.add( mesh );
-
-	renderer = new THREE.WebGLRenderer();
+	renderer = new THREE.WebGLRenderer({ antialias: true });
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.shadowMap.enabled;
+
 	document.body.appendChild( renderer.domElement );
 	window.addEventListener( 'resize', onWindowResize, false );
 
