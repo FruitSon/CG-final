@@ -17,11 +17,11 @@
 	<body>
   		<canvas id="scene"></canvas>
   		<div id="controls"></div>
+  		<script src="lib/OrbitControls.js"></script>
+  		<script src="lib/ImprovedNoise.js"></script>
   		<script src="js/Terrain.js"></script>
   		<script src="js/AudioAnalyzer.js"></script>
   		<script src="js/island.js"></script>
-
-  		<script src="lib/OrbitControls.js"></script>
   		<script>
   			var controls = new THREE.OrbitControls( camera, renderer.domElement );
 			controls.target.set( 0, 1, 0 );

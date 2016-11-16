@@ -15,16 +15,27 @@ function init() {
 	scene = new THREE.Scene();
 
 	renderer = new THREE.WebGLRenderer({ antialias: true });
+	renderer.setClearColor(0x4286f4);
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
-	renderer.shadowMap.enabled;
+	renderer.shadowMap.enabled = true;
+
+	//light
+	light = new THREE.SpotLight(0xffffff, 1);
+	light.position.set(0,10000,-20000);
+	light.castShadow = true;
+	light.receiveShadow = true;
+	helper = new THREE.CameraHelper( light.shadow.camera );
+
+	// scene.add(helper);
+	scene.add(light);
 
 	document.body.appendChild( renderer.domElement );
 	window.addEventListener( 'resize', onWindowResize, false );
 
 	// initialize audio analyzer
-	analyzer = AudioAnalyzer('https://mdn.github.io/voice-change-o-matic/audio/concert-crowd.ogg');
-	window.addEventListener('load', analyzer.startPlaying, false);
+	// analyzer = AudioAnalyzer('https://mdn.github.io/voice-change-o-matic/audio/concert-crowd.ogg');
+	// window.addEventListener('load', analyzer.startPlaying, false);
 
 	// initialize terrain
 	terrain = Terrain(scene);
@@ -42,6 +53,7 @@ function render() {
 	// mesh.rotation.y += 0.01;
 	renderer.render( scene, camera );
 	// draw();
+	terrain.updateData();
 }
 
 function draw() {
