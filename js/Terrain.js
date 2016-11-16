@@ -167,7 +167,7 @@ function Terrain(scene) {
 
 		heights = generateHeight(worldWidth, worldHeight);
 
-		geometry = new THREE.PlaneBufferGeometry(7500, 7500, worldWidth - 1, worldHeight - 1);
+		geometry = new THREE.PlaneBufferGeometry(15000, 15000, worldWidth - 1, worldHeight - 1);
 		geometry.rotateX( - Math.PI / 2 );
 		geometry.rotateY(Math.PI);
 		geometry.dynamic = true;
@@ -191,26 +191,6 @@ function Terrain(scene) {
 
 		
 		scene.add(mesh);
-
-		// platform = new THREE.PlaneBufferGeometry(1500, 1500);
-		// platform.rotateX( - Math.PI / 2 );
-		// var platformVertices = platform.attributes.position.array;
-		// for ( var i = 0, j = 0, l = platformVertices.length; j < l; i ++, j += 3 ) {
-		// 	platformVertices[j + 1] = 3000;
-		// }
-
-		// platformBottom = new THREE.PlaneBufferGeometry(1500, 1500, worldWidth - 1, worldHeight - 1);
-		// platformBottom.rotateX( - Math.PI / 2 );
-		// var platformBottomVertices = platformBottom.attributes.position.array;
-		// for ( var i = 0, j = 0, l = platformBottomVertices.length; j < l; i ++, j += 3 ) {
-		// 	platformBottomVertices[j + 1] = 3000 - heights[i] * 10;
-		// }
-
-		// platformMesh = new THREE.Mesh(platform, new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} ));
-		// platformBottomMesh = new THREE.Mesh(platformBottom, new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} ));
-
-		// scene.add(platformMesh);
-		// scene.add(platformBottomMesh);
 		return that;
 	}
 

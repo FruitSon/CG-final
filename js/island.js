@@ -1,5 +1,5 @@
-var canvas = document.getElementById('scene');
-var canvasCtx = canvas.getContext("2d");
+// var canvas = document.getElementById('scene');
+// var canvasCtx = canvas.getContext("2d");
 
 var camera, scene, light, renderer, analyzer, terrain;
 var mesh;
@@ -10,8 +10,8 @@ render();
 function init() {
 	camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
 	// camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 1, 1000 );
-	// camera.position.z = 400;
-	camera.position.y = 5000;
+	camera.position.set(0, 6000, 4000);
+	camera.rotation.x = Math.PI / 2;
 	scene = new THREE.Scene();
 
 	renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -22,7 +22,7 @@ function init() {
 
 	//light
 	light = new THREE.SpotLight(0xffffff, 1);
-	light.position.set(0,10000,-20000);
+	light.position.set(0, 10000, -20000);
 	light.castShadow = true;
 	light.receiveShadow = true;
 	helper = new THREE.CameraHelper( light.shadow.camera );
@@ -39,7 +39,12 @@ function init() {
 
 	// initialize terrain
 	terrain = Terrain(scene);
+	Stage(scene);
+	tree = DrawTree();
+	tree.translateY(3000);
+	scene.add(tree);
 }
+
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
