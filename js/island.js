@@ -28,6 +28,7 @@ function init() {
 
 	// initialize terrain
 	terrain = Terrain(scene);
+	DrawTree(scene);
 }
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight;
