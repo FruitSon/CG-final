@@ -1,9 +1,11 @@
 var hMoveSpeed = 1;
 var wMoveSpeed = 0;
+var pixelWidth = 7500;
+var pixelHeight = 7500;
 var worldWidth = 256;
 var worldHeight = 256;
 var resolution = 16;
-var light,helper,material;
+var scale = 5;
 
 function Terrain(scene) {
 	var that = {};
@@ -74,14 +76,14 @@ function Terrain(scene) {
 		for (var i = 0; i < worldWidth; i ++) {
 			for (var j = worldHeight - hMoveSpeed; j < worldHeight; j ++) {
 				heights[j * worldWidth + i] = generateHeightAtPoint(i, j, t);
-				vertices[3 * (j * worldWidth + i) + 1] = heights[j * worldWidth + i] * 10;
+				vertices[3 * (j * worldWidth + i) + 1] = heights[j * worldWidth + i] * scale;
 			}
 		}
 
 		for (var i = worldWidth - wMoveSpeed; i < worldWidth; i ++) {
 			for (var j = 0; j < worldHeight - hMoveSpeed; j ++) {
 				heights[j * worldWidth + i] = generateHeightAtPoint(i, j, t);
-				vertices[3 * (j * worldWidth + i) + 1] = heights[j * worldWidth + i] * 10;
+				vertices[3 * (j * worldWidth + i) + 1] = heights[j * worldWidth + i] * scale;
 			}
 		}
 
@@ -92,7 +94,7 @@ function Terrain(scene) {
 		texture.needsUpdate = true;
 	};
 
-	var mesh, geometry, texture;
+	var mesh, geometry, texture, heights;
 
 	var z = Math.random() * 100, perlin = new ImprovedNoise(), t = 0;
 
@@ -161,8 +163,6 @@ function Terrain(scene) {
 		return canvasScaled;
 	}
 
-	var heights, platform, platformMesh, platformBottom, platformBottomMesh;
-
 	var init = function() {
 
 		heights = generateHeight(worldWidth, worldHeight);
@@ -176,21 +176,19 @@ function Terrain(scene) {
 		var vertices = geometry.attributes.position.array;
 
 		for ( var i = 0, j = 0, l = vertices.length; j < l; i ++, j += 3 ) {
-			vertices[j + 1] = heights[i] * 10;
+			vertices[j + 1] = heights[i] * scale;
 		}
 
 		texture = new THREE.CanvasTexture( generateTexture( heights, worldWidth, worldHeight ) );
 		texture.wrapS = THREE.ClampToEdgeWrapping;
 		texture.wrapT = THREE.ClampToEdgeWrapping;
-		mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial( { map: texture } ) );
+		mesh = that.mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial( { map: texture } ) );
 		
-		
+		var light,helper,material;
 		//reference: https://threejs.org/docs/api/materials/MeshPhongMaterial.html
 		// material = new THREE.MeshPhongMaterial({ color: 0xffffff, specular: 0xffffff, shininess: 0, shading: THREE.SmoothShading, wireframe:false, side: THREE.DoubleSide});
 		// mesh = new THREE.Mesh(geometry,material);
 
-		
-		scene.add(mesh);
 		return that;
 	}
 

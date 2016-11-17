@@ -10,7 +10,7 @@ render();
 function init() {
 	camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
 	// camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 1, 1000 );
-	camera.position.set(0, 6000, 4000);
+	camera.position.set(0, 4000, 4000);
 	camera.rotation.x = Math.PI / 2;
 	scene = new THREE.Scene();
 
@@ -37,11 +37,18 @@ function init() {
 	// analyzer = AudioAnalyzer('https://mdn.github.io/voice-change-o-matic/audio/concert-crowd.ogg');
 	// window.addEventListener('load', analyzer.startPlaying, false);
 
-	// initialize terrain
+	// initialize scenes
 	terrain = Terrain(scene);
-	Stage(scene);
+	scene.add(terrain.mesh);
+
+	stage = Stage();
+	stage.mesh.translateY(1500);
+	stage.mesh.translateZ(1000);
+	scene.add(stage.mesh);
+
 	tree = DrawTree();
-	tree.translateY(3000);
+	tree.translateY(1500);
+	tree.translateZ(1000);
 	scene.add(tree);
 }
 

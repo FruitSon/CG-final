@@ -24,10 +24,11 @@ var DrawTree = function(){
       for(var i = 0 ; i < n ; i++){
             var str = new String();
             // str += "s";
-            for(var j = 0 ; j < w.length ; j++)
+            for(var j = 0 ; j < w.length ; j++) {
                   if(w[j] === "F") str += "F";
-            else if(w[j] === "X") str += "FF[+X][^X][-X][vX][X]";
-            else str += w[j];
+                  else if(w[j] === "X") str += "FF[+X][^X][-X][vX][X]";
+                  else str += w[j];
+            }
             w = str;
       }
 
@@ -35,69 +36,67 @@ var DrawTree = function(){
             var c = w[k];
             switch(c){
                   case "<":
-                  anxis = 2;
-                  turtleface = new THREE.Vector3(turtleface.x , turtleface.y, turtleface.z + zdegree);
-                  break;
+                        anxis = 2;
+                        turtleface = new THREE.Vector3(turtleface.x , turtleface.y, turtleface.z + zdegree);
+                        break;
                   case ">":
-                  anxis = 2;
-                  turtleface = new THREE.Vector3(turtleface.x , turtleface.y, turtleface.z - zdegree);
-                  break;
+                        anxis = 2;
+                        turtleface = new THREE.Vector3(turtleface.x , turtleface.y, turtleface.z - zdegree);
+                        break;
                   case "^":
-                  anxis = 1;
-                  turtleface = new THREE.Vector3(turtleface.x + xdegree, turtleface.y, turtleface.z);
-                  break;
+                        anxis = 1;
+                        turtleface = new THREE.Vector3(turtleface.x + xdegree, turtleface.y, turtleface.z);
+                        break;
                   case "v":
-                  anxis = 1;
-                  turtleface = new THREE.Vector3(turtleface.x - xdegree, turtleface.y, turtleface.z);
-                  break;
+                        anxis = 1;
+                        turtleface = new THREE.Vector3(turtleface.x - xdegree, turtleface.y, turtleface.z);
+                        break;
                   case "+":
-                  anxis = 0;
-                  turtleface = new THREE.Vector3(turtleface.x , turtleface.y + ydegree, turtleface.z);
-                  break;
+                        anxis = 0;
+                        turtleface = new THREE.Vector3(turtleface.x , turtleface.y + ydegree, turtleface.z);
+                        break;
                   case "-":
-                  anxis = 0;
-                  turtleface = new THREE.Vector3(turtleface.x , turtleface.y - ydegree, turtleface.z);
-                  break;
+                        anxis = 0;
+                        turtleface = new THREE.Vector3(turtleface.x , turtleface.y - ydegree, turtleface.z);
+                        break;
                   case "[":
-                  posStack.push(turtlepos);
-                  angleStack.push(turtleface);
-                  // angle2Stack.push(turtlefacex);
-                  trunkStack.push(Radium);
-                  anxisStack.push(anxis);
-                  stepStack.push(steplen);
-                  steplen = steplen*ratio;
-                  break;
+                        posStack.push(turtlepos);
+                        angleStack.push(turtleface);
+                        // angle2Stack.push(turtlefacex);
+                        trunkStack.push(Radium);
+                        anxisStack.push(anxis);
+                        stepStack.push(steplen);
+                        steplen = steplen*ratio;
+                        break;
                   case "]":
-                  turtlepos = posStack.pop();
-                  turtleface = angleStack.pop();
-                  // turtlefacex = angle2Stack.pop();
-                  anxis = anxisStack.pop();
-                  steplen = stepStack.pop();
-                  Radium = trunkStack.pop();
-                  // anxis = anxisStack.pop();
-                  break;
+                        turtlepos = posStack.pop();
+                        turtleface = angleStack.pop();
+                        // turtlefacex = angle2Stack.pop();
+                        anxis = anxisStack.pop();
+                        steplen = stepStack.pop();
+                        Radium = trunkStack.pop();
+                        // anxis = anxisStack.pop();
+                        break;
                   case "F":
-                  if(anxis === 0){
-                        var y = Math.sin(turtleface.y * Math.PI / 180) * steplen;
-                        var x = Math.cos(turtleface.y * Math.PI / 180 ) * steplen;
-                        var destpos = new THREE.Vector3(turtlepos.x + x, turtlepos.y + y, turtlepos.z);
-                  }else if(anxis === 1){
-                        var z = Math.cos(turtleface.x * Math.PI / 180) * steplen;
-                        var y = Math.sin(turtleface.x * Math.PI / 180) * steplen;
-                        var destpos = new THREE.Vector3(turtlepos.x, turtlepos.y + y, turtlepos.z + z);
-                  }else if(anxis === 2){
-                        var z = Math.sin(turtleface.z * Math.PI / 180) * steplen;
-                        var x = Math.cos(turtleface.z * Math.PI / 180) * steplen;
-                        var destpos = new THREE.Vector3(turtlepos.x + x, turtlepos.y , turtlepos.z + z);
+                        if(anxis === 0){
+                              var y = Math.sin(turtleface.y * Math.PI / 180) * steplen;
+                              var x = Math.cos(turtleface.y * Math.PI / 180 ) * steplen;
+                              var destpos = new THREE.Vector3(turtlepos.x + x, turtlepos.y + y, turtlepos.z);
+                        }else if(anxis === 1){
+                              var z = Math.cos(turtleface.x * Math.PI / 180) * steplen;
+                              var y = Math.sin(turtleface.x * Math.PI / 180) * steplen;
+                              var destpos = new THREE.Vector3(turtlepos.x, turtlepos.y + y, turtlepos.z + z);
+                        }else if(anxis === 2){
+                              var z = Math.sin(turtleface.z * Math.PI / 180) * steplen;
+                              var x = Math.cos(turtleface.z * Math.PI / 180) * steplen;
+                              var destpos = new THREE.Vector3(turtlepos.x + x, turtlepos.y , turtlepos.z + z);
+                        }
+                        var material = new THREE.MeshBasicMaterial( {color: 0xBBAA05} );
+                        var cylinder = createCylinderFromEnds(material,ratio*Radium, Radium, destpos, turtlepos,16,false);
+                        parent.add( cylinder );
 
-                  }
-
-                  var material = new THREE.MeshBasicMaterial( {color: 0xBBAA05} );
-                  var cylinder = createCylinderFromEnds(material,ratio*Radium, Radium, destpos, turtlepos,16,false);
-                  parent.add( cylinder );
-
-                  turtlepos = destpos;
-                  Radium = ratio*Radium;
+                        turtlepos = destpos;
+                        Radium = ratio*Radium;
             }
       }
       return parent;
