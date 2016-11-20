@@ -37,8 +37,8 @@ function Terrain(scene) {
 		${NoiseSource}
 
 	    void main() {
-	    	float scale = 200.0;
-	    	float size = 20.0;
+	    	float scale = 500.0;
+	    	float size = 50.0;
 
 	        vec2 local = mod(gPosition.xz, scale);
 	        if (distance(local, vec2(scale / 2.0, scale / 2.0)) < size) {

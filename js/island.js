@@ -1,9 +1,11 @@
-var camera, scene, light, renderer, terrain, lanterns = new Array(), paperman;
+var camera, scene, light, renderer, terrain, lanterns = new Array();
 var mesh;
 
 var terrain, stage, tr, tree, ball, part;
 
-var startTime, lastTime;
+var startTime, lastTime, framen = 0;
+
+var max = 0, avg = 0, lon = 0, lat = 0;
 
 init();
 render();
@@ -22,9 +24,9 @@ function init() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.shadowMap.enabled = true;
 
-	var controls = new THREE.OrbitControls( camera, renderer.domElement );
-	controls.target.set( 0, 1, 0 );
-	controls.update();
+	// var controls = new THREE.OrbitControls( camera, renderer.domElement );
+	// controls.target.set( 0, 1, 0 );
+	// controls.update();
 
 	//light
 	light = new THREE.PointLight(0xffffff);
@@ -53,12 +55,6 @@ function init() {
 	tree.translateY(1500);
 	tree.translateZ(1000);
 	scene.add(tree);
-
-	for (var i = 0; i < 20; i ++) {
-		var lantern = Lantern(camera);
-		lanterns.push(lantern);
-		scene.add(lantern.mesh);
-	}
 	
 	tr = new Tree();
 	tr.Buildtree(5);
@@ -101,24 +97,38 @@ function render() {
     
 	var currentTime = Date.now();
 	if (currentTime - lastTime >= 1000 / FPS) {
+		framen ++;
 		lastTime = currentTime;
 
 		terrain.uniforms['time'].value = Date.now() - startTime;
 
-		// lanterns
-		var toBeRemoved = new Array();
-		for (var i = 0; i < lanterns.length; i ++) {
+		// lantterns
+		for (var i = lanterns.length - 1; i >= 0 ; i --) {
 			if (lanterns[i].update()) {
-				scene.remove(lanterns[i]);
-				toBeRemoved.push(i);
+				scene.remove(lanterns[i].mesh);
+				lanterns.splice(i, 1);
 			}
 		}
 
-		for (var i = 0; i < toBeRemoved.length; i ++) {
-			lanterns.splice(toBeRemoved[i], 1);
+		for (var i = 0; i < max - 220; i ++) {
+			var lantern = Lantern(camera);
+			lanterns.push(lantern);
+			scene.add(lantern.mesh);
 		}
 
-		renderer.render( scene, camera );
+		// camera
+		if (Math.floor(framen / 500) % 4 === 0) {
+			lon += 0.4;
+			lat = Math.sin(THREE.Math.degToRad(framen)) * 10 + 70;
+			var phi = THREE.Math.degToRad( 90 - lat );
+			var theta = THREE.Math.degToRad(lon);
+			camera.position.x = 20000 * Math.sin( phi ) * Math.cos( theta );
+			camera.position.y = 2000 + 4000 * Math.cos( phi );
+			camera.position.z = 20000 * Math.sin( phi ) * Math.sin( theta );
+			camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+			renderer.render( scene, camera );
+		}
 
 		// trees
 		if(tr.time < tr.timeLimit){

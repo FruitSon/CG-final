@@ -69,7 +69,7 @@ function AudioAnalyzer(url) {
 		analyzer = context.createAnalyser();
 		source.connect(analyzer);
 
-		// analyzer.connect(context.destination);
+		analyzer.connect(context.destination);
 		source.start(0);
 
 		finished = true;

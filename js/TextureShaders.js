@@ -114,7 +114,7 @@ var NoiseSource = `
     float wood(float x, float y, float z) {
         float size = 1.0;
         float turbPower = 0.2;
-        float ringn = 1.0;
+        float ringn = 5.0;
 
         x = mod(x, size);
         y = mod(y, size);

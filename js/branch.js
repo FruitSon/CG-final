@@ -43,7 +43,7 @@ Branch.prototype.FragmentSource = `
         float g = 30.0 / 256.0;
         float b = 14.0 / 256.0;
 
-        float value = mod(wood(vUv.x, vUv.y, 71.0), 20.0 / 256.0);
+        float value = mod(wood(x, y, z), 20.0 / 256.0);
 
         gl_FragColor = vec4(r + value, g + value, b, 1);
     }

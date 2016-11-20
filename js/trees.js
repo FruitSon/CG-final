@@ -102,7 +102,7 @@ var DrawTree = function(){
                               var x = Math.cos(turtleface.z * Math.PI / 180) * steplen;
                               var destpos = new THREE.Vector3(turtlepos.x + x, turtlepos.y , turtlepos.z + z);
                         }
-                        var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+                        var material = new THREE.MeshBasicMaterial( {color: 0x824d12} );
                         var cylinder = createCylinderFromEnds(material,ratio*Radium, Radium, destpos, turtlepos,16,false);
                         parent.add( cylinder );
 

@@ -105,7 +105,7 @@ function Lantern(camera) {
 		return [x, y, z];
 	}
 
-	var lantern, lanternGlow, initPosition, finalPosition, mesh, life = (FPS * Math.random() * 10), speed;
+	var lantern, lanternGlow, initPosition, finalPosition, mesh, life = (FPS * Math.random() * 5), speed;
 	var modifier;
 
 	var init = function() {
