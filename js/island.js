@@ -1,7 +1,7 @@
 // var canvas = document.getElementById('scene');
 // var canvasCtx = canvas.getContext("2d");
 
-var camera, scene, light, renderer, analyzer, terrain;
+var camera, scene, light, renderer, analyzer, terrain, lantern,lanternRange;
 var mesh;
 
 init();
@@ -15,20 +15,19 @@ function init() {
 	scene = new THREE.Scene();
 
 	renderer = new THREE.WebGLRenderer({ antialias: true });
-	renderer.setClearColor(0x4286f4);
+	renderer.setClearColor(0x000000);
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.shadowMap.enabled = true;
 
 	//light
-	light = new THREE.SpotLight(0xffffff, 1);
-	light.position.set(0, 10000, -20000);
+	light = new THREE.PointLight(0xffffff);
+	light.position.set(0, 10000, 0);
 	light.castShadow = true;
-	light.receiveShadow = true;
-	helper = new THREE.CameraHelper( light.shadow.camera );
 
 	// scene.add(helper);
 	scene.add(light);
+	scene.add(new THREE.AmbientLight(0xffff00));
 
 	document.body.appendChild( renderer.domElement );
 	window.addEventListener( 'resize', onWindowResize, false );
@@ -50,6 +49,11 @@ function init() {
 	tree.translateY(1500);
 	tree.translateZ(1000);
 	scene.add(tree);
+
+	// lanternRange = [5000,5000,5000];
+	lantern = Lantern(camera,scene,renderer,10);
+	// lantern = Lantern();
+
 }
 
 function onWindowResize() {
