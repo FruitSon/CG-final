@@ -1,8 +1,11 @@
 // var canvas = document.getElementById('scene');
 // var canvasCtx = canvas.getContext("2d");
 
-var camera, scene, light, renderer, analyzer, terrain;
-var mesh;
+var camera, scene, light, renderer, analyzer;
+
+var terrain, stage, tree, ball;
+
+var startTime, lastTime;
 
 init();
 render();
@@ -10,15 +13,20 @@ render();
 function init() {
 	camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
 	// camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 1, 1000 );
-	camera.position.set(0, 4000, 4000);
+	camera.position.set(0, 10000, 0);
 	camera.rotation.x = Math.PI / 2;
 	scene = new THREE.Scene();
+	scene.fog = new THREE.Fog( 0xcce0ff, 500, 10000 );
 
 	renderer = new THREE.WebGLRenderer({ antialias: true });
-	renderer.setClearColor(0x4286f4);
+	renderer.setClearColor(0xcce0ff);
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.shadowMap.enabled = true;
+
+	var controls = new THREE.OrbitControls( camera, renderer.domElement );
+	controls.target.set( 0, 1, 0 );
+	controls.update();
 
 	//light
 	light = new THREE.SpotLight(0xffffff, 1);
@@ -46,10 +54,17 @@ function init() {
 	stage.mesh.translateZ(1000);
 	scene.add(stage.mesh);
 
+	ball = Ball();
+	ball.mesh.translateY(2000);
+	scene.add(ball.mesh);
+
 	tree = DrawTree();
 	tree.translateY(1500);
 	tree.translateZ(1000);
 	scene.add(tree);
+
+	startTime = Date.now();
+	lastTime = startTime;
 }
 
 function onWindowResize() {
@@ -60,12 +75,28 @@ function onWindowResize() {
 
 function render() {
 	requestAnimationFrame( render );
-	// rotate
-	// mesh.rotation.x += 0.005;
-	// mesh.rotation.y += 0.01;
-	renderer.render( scene, camera );
-	// draw();
-	terrain.updateData();
+
+	var currentTime = Date.now();
+	if (currentTime - lastTime >= 1000 / FPS) {
+		lastTime = currentTime;
+		// rotate
+		// mesh.rotation.x += 0.005;
+		// mesh.rotation.y += 0.01;
+		// terrain.updateData();
+		terrain.uniforms['time'].value = Date.now() - startTime;
+		
+		renderer.render( scene, camera );
+		// draw();
+	}
+	
+	
+
+	// var gl = renderer.getContext();
+ //    var compiled = gl.getShaderParameter(ball.material.program, gl.COMPILE_STATUS);
+ //    console.log('Shader compiled successfully: ' + compiled);
+ //    var compilationLog = gl.getShaderInfoLog(ball.material.program);
+ //    console.log('Shader compiler log: ' + compilationLog);
+ //    debugger;
 }
 
 function draw() {
