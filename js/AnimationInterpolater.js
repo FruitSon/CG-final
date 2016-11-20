@@ -1,6 +1,7 @@
 function AnimationInterpolater(frames, interval, fps) {
 	var that = {};
 
+	console.log("s");
 	/**
 	 * get the frame of current time or a given time
 	 * @param  {undefined or int} t the timestamp in millisecond, or undefined if want to get the current frame
@@ -9,6 +10,9 @@ function AnimationInterpolater(frames, interval, fps) {
 	var getFrame = that.getFrame = function(t) {
 		var frame = new Array();
 		var curTime = t;
+    	console.log(curTime,lastTime,startTime);
+
+
 		if (curTime === undefined) {
 			curTime = new Date().getTime();
 		} else if (curTime - lastTime < 1000 / fps) {
@@ -16,9 +20,13 @@ function AnimationInterpolater(frames, interval, fps) {
 		} else {
 			lastTime = curTime;
 		}
-    	var t = ((curTime - startTime) % interval) / interval;
+
+		    	console.log(1%interval/interval);
+
+    	var t = ((curTime - startTime) % interval) *1.0/ interval;
+    	console.log((curTime) );
 	    var fn = Math.floor(((curTime - startTime) / interval)) % frames.length;
-	    for (var i = 0; i < frames.length; i ++) {
+	    for (var i = 0; i < frames[fn].length; i ++) {
 	    	frame.push((1 - t) * frames[fn][i] + t * frames[(fn + 1) % frames.length][i]);
 	    }
 	    return frame;

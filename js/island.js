@@ -1,4 +1,4 @@
-var camera, scene, light, renderer, analyzer, terrain, lantern;
+var camera, scene, light, renderer, analyzer, terrain, sky, lantern, paperman;
 var mesh;
 
 var terrain, stage, tr, ball;
@@ -9,7 +9,7 @@ init();
 render();
 
 function init() {
-	camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
+	camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 40000 );
 	// camera = new THREE.PerspectiveCamera( 100, window.innerWidth / window.innerHeight, 1, 1000 );
 	camera.position.set(0, 10000, 0);
 	camera.rotation.x = Math.PI / 2;
@@ -32,7 +32,7 @@ function init() {
 	light.castShadow = true;
 
 	scene.add(light);
-	scene.add(new THREE.AmbientLight(0xffff00));
+	scene.add(new THREE.AmbientLight(0xffffff));
 
 	
 
@@ -55,6 +55,17 @@ function init() {
 	ball.mesh.translateX(3000);
 	ball.mesh.translateY(3000);
 	scene.add(ball.mesh);
+
+	sky = Sky();
+	scene.add(sky.mesh);
+
+	paperman = PaperMan();
+	paperman.mesh.translateX(1000);
+	paperman.mesh.translateY(3000);
+	paperman.mesh.translateZ(1000);
+	scene.add(paperman.mesh);
+
+	console.log(paperman.mesh, paperman.mesh.position);
 
 	// tree = DrawTree();
 	// tree.translateY(1500);
@@ -97,6 +108,26 @@ function render() {
 		}
 
 		lantern.update();
+
+		//update model
+		var skeletonLen = paperman.mesh.skeleton.bones.length;
+		// console.log(paperman.mesh.skeleton.bones[0].position);
+		var curP, expP;
+		for(var i = 0; i < skeletonLen; i++){
+			//get current position
+			var tempP = paperman.mesh.skeleton.bones[i].position;
+			curP = [tempP.x,tempP.y,tempP.z];
+			expP = [tempP.x+3000,tempP.y+200,tempP.z+3000];
+			var frames = [curP,expP];
+			var res = AnimationInterpolater(frames, 1000, 30).getFrame();
+			//translate the joint
+			console.log(curP,expP);
+			console.log(curP,res);
+			paperman.mesh.skeleton.bones[i].position.set(res[0], res[1], res[2]);   
+
+		}
+
+
 		renderer.render( scene, camera );
 		// draw();
 	}
