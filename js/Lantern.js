@@ -30,29 +30,18 @@ function Lantern(camera) {
 		lanternGlow.material.uniforms.viewVector.value = 
 		new THREE.Vector3().subVectors( camera.position, lanternGlow.position);
 
-		// life --;
-		// if (life == 0) {
-		// 	return true;
-		// }
-
-		// var lvs = lantern.geometry.vertices;
-		// for(var i = 0; i < lvs.length; i ++) {
-		// 	lvs[i].x += speed[0];
-		// 	lvs[i].y += speed[1];
-		// 	lvs[i].z += speed[2];
-		// }
+		life --;
+		if (life <= 0) {
+			return true;
+		}
 		
-		// var lgvs = lanternGlow.geometry.vertices;
-		// for(var i = 0; i < lgvs.length; i ++) {
-		// 	lgvs[i].x += speed[0];
-		// 	lgvs[i].y += speed[1];
-		// 	lgvs[i].z += speed[2];
-		// }
-		
-		// lantern.geometry.verticesNeedUpdate = true;
-		// lanternGlow.geometry.verticesNeedUpdate = true;
+		initPosition[0] += speed[0];
+		initPosition[1] += speed[1];
+		initPosition[2] += speed[2];
+		lantern.position.set(initPosition[0], initPosition[1], initPosition[2]);
+		lanternGlow.position.set(initPosition[0], initPosition[1], initPosition[2]);
 
-		// return false;
+		return false;
 	}
 
 	var generateLights = function (camera){
@@ -107,7 +96,7 @@ function Lantern(camera) {
 		return [x, y, z];
 	}
 
-	var lantern, lanternGlow, initPosition, finalPosition, mesh, life = FPS * Math.random() * 100, speed;
+	var lantern, lanternGlow, initPosition, finalPosition, mesh, life = (FPS * Math.random() * 10), speed;
 	var modifier;
 
 	var init = function() {

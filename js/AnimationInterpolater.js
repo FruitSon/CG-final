@@ -18,7 +18,7 @@ function AnimationInterpolater(frames, interval, fps) {
 		}
     	var t = ((curTime - startTime) % interval) / interval;
 	    var fn = Math.floor(((curTime - startTime) / interval)) % frames.length;
-	    for (var i = 0; i < frames.length; i ++) {
+	    for (var i = 0; i < frames[fn].length; i ++) {
 	    	frame.push((1 - t) * frames[fn][i] + t * frames[(fn + 1) % frames.length][i]);
 	    }
 	    return frame;

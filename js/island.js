@@ -107,9 +107,11 @@ function render() {
 		var toBeRemoved = new Array();
 		for (var i = 0; i < lanterns.length; i ++) {
 			if (lanterns[i].update()) {
+				scene.remove(lanterns[i]);
 				toBeRemoved.push(i);
 			}
 		}
+
 		for (var i = 0; i < toBeRemoved.length; i ++) {
 			lanterns.splice(toBeRemoved[i], 1);
 		}
