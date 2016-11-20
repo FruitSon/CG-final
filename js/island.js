@@ -3,6 +3,10 @@
 
 var camera, scene, light, renderer, analyzer, terrain, lantern,lanternRange;
 var mesh;
+var tr = new Tree();
+tr.Buildtree(4);
+var Limit = tr.CalTimelimit();
+
 
 init();
 render();
@@ -28,6 +32,8 @@ function init() {
 	// scene.add(helper);
 	scene.add(light);
 	scene.add(new THREE.AmbientLight(0xffff00));
+	tr.tree.scale.multiplyScalar(30);
+	scene.add(tr.tree);
 
 	document.body.appendChild( renderer.domElement );
 	window.addEventListener( 'resize', onWindowResize, false );
@@ -48,6 +54,7 @@ function init() {
 	tree = DrawTree();
 	tree.translateY(1500);
 	tree.translateZ(1000);
+
 	scene.add(tree);
 
 	// lanternRange = [5000,5000,5000];
@@ -62,15 +69,23 @@ function onWindowResize() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
+
 function render() {
 	requestAnimationFrame( render );
 	// rotate
 	// mesh.rotation.x += 0.005;
 	// mesh.rotation.y += 0.01;
+	if(tr.time < Limit){
+	 	tr.CalBranchLength(tr.time);
+	 	tr.time += 0.05;
+	 	tr.RemoveAllBranch();
+	 	tr.AddBranch();
+	}
 	renderer.render( scene, camera );
 	// draw();
 	terrain.updateData();
 }
+
 
 function draw() {
 	var audioData = analyzer.analyze();
