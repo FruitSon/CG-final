@@ -1,7 +1,7 @@
 var camera, scene, light, renderer, terrain, lanterns = new Array(), paperman;
 var mesh;
 
-var terrain, stage, tr, ball;
+var terrain, stage, tr, tree, ball, part;
 
 var startTime, lastTime;
 
@@ -49,10 +49,10 @@ function init() {
 	sky = Sky();
 	scene.add(sky.mesh);
 
-	// tree = DrawTree();
-	// tree.translateY(1500);
-	// tree.translateZ(1000);
-	// scene.add(tree);
+	tree = DrawTree();
+	tree.translateY(1500);
+	tree.translateZ(1000);
+	scene.add(tree);
 
 	for (var i = 0; i < 20; i ++) {
 		var lantern = Lantern(camera);
@@ -61,11 +61,18 @@ function init() {
 	}
 	
 	tr = new Tree();
-	tr.Buildtree(6);
+	tr.Buildtree(5);
 	tr.tree.translateY(1500);
-
-	tr.tree.scale.multiplyScalar(30);
+	tr.tree.scale.multiplyScalar(20);
 	scene.add(tr.tree);
+
+	part = new Particle();
+	part.create(100);
+	part.particles.scale.multiplyScalar(10);
+	part.particles.translateY(1500);
+
+	scene.add(part.particles);
+
 
 	startTime = Date.now();
 	lastTime = startTime;
@@ -76,7 +83,7 @@ function onWindowResize() {
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
 }
-
+var time = 0;
 function render() {
 	requestAnimationFrame( render );
 
@@ -91,7 +98,7 @@ function render() {
 		}
 		avg = sum / audioData.length;
 	}
-
+    
 	var currentTime = Date.now();
 	if (currentTime - lastTime >= 1000 / FPS) {
 		lastTime = currentTime;
@@ -121,13 +128,9 @@ function render() {
 	 		tr.AddBranch();
 		}
 
-		if(tr.time < tr.timeLimit){
-	 		tr.CalBranchLength(tr.time);
-	 		tr.time = (currentTime - startTime) / 1000;
-	 		tr.RemoveAllBranch();
-	 		tr.AddBranch();
-		}
-
+		
+		part.move(time);
+		time = time+1;
 		renderer.render( scene, camera );
 		// draw();
 	}

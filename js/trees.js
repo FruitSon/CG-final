@@ -26,7 +26,14 @@ var DrawTree = function(){
             // str += "s";
             for(var j = 0 ; j < w.length ; j++) {
                   if(w[j] === "F") str += "F";
-                  else if(w[j] === "X") str += "FF[+X][^X][-X][vX][X]";
+                  else if(w[j] === "X") {
+                        c = getRandomInt(1,4);
+                        switch(c){
+                         case 1: str += "FF[+X][^X][-X][vX][X]";break;
+                         case 2: str += "FF[+X][-X]";break;
+                         case 3: str += "FF[vX][^X]";break;
+                        }
+                  }
                   else str += w[j];
             }
             w = str;
@@ -45,18 +52,22 @@ var DrawTree = function(){
                         break;
                   case "^":
                         anxis = 1;
+                        xdegree = Math.random() * 60;
                         turtleface = new THREE.Vector3(turtleface.x + xdegree, turtleface.y, turtleface.z);
                         break;
                   case "v":
                         anxis = 1;
+                        xdegree = Math.random() * 60;
                         turtleface = new THREE.Vector3(turtleface.x - xdegree, turtleface.y, turtleface.z);
                         break;
                   case "+":
                         anxis = 0;
+                        ydegree = Math.random() * 60;
                         turtleface = new THREE.Vector3(turtleface.x , turtleface.y + ydegree, turtleface.z);
                         break;
                   case "-":
                         anxis = 0;
+                        ydegree = Math.random() * 60;
                         turtleface = new THREE.Vector3(turtleface.x , turtleface.y - ydegree, turtleface.z);
                         break;
                   case "[":
@@ -91,7 +102,7 @@ var DrawTree = function(){
                               var x = Math.cos(turtleface.z * Math.PI / 180) * steplen;
                               var destpos = new THREE.Vector3(turtlepos.x + x, turtlepos.y , turtlepos.z + z);
                         }
-                        var material = new THREE.MeshBasicMaterial( {color: 0xBBAA05} );
+                        var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
                         var cylinder = createCylinderFromEnds(material,ratio*Radium, Radium, destpos, turtlepos,16,false);
                         parent.add( cylinder );
 

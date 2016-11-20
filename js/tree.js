@@ -20,14 +20,14 @@ Tree.prototype.CalBranchLength = function(t){
 }
 //add all branches to tree
 Tree.prototype.AddBranch = function(){
-	this.branches.AddtoScene(tr.tree);
+	this.branches.AddtoScene(this.tree);
 }
 //remove a branch from the tree
 Tree.prototype.RemoveAllBranch = function(){
-	if(tr.tree.children.length > 0){
-		for(var i = tr.tree.children.length - 1 ; i >= 0 ; i --){
-			let obj = tr.tree.children[i];
-			tr.tree.remove(obj);
+	if(this.tree.children.length > 0){
+		for(var i = this.tree.children.length - 1 ; i >= 0 ; i --){
+			let obj = this.tree.children[i];
+			this.tree.remove(obj);
 		}
     }
 }

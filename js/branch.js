@@ -1,8 +1,8 @@
-var Aa = 10;
+var Aa = 20;
 var Ba = 0.48;
 var BETA = 1;
 var LATE = 1;
-var GROW = 3;
+var GROW = 2;
 var RATIO = 0.5;
 
 var flowercolor = {color: 0xffffff};
@@ -106,7 +106,7 @@ Branch.prototype.CalLength = function(){
 			this.len = Aa * Math.pow(Math.E, Ba * this.localtime) - 1;
 			break;
 		case "b":
-			this.len = 2 * Aa * this.localtime;//Aa/Math.pow(BETA,3) * (BETA * Ba - 2) * Math.pow(this.localtime,3)
+			this.len = Aa * this.localtime;//Aa/Math.pow(BETA,3) * (BETA * Ba - 2) * Math.pow(this.localtime,3)
 						  //+ Aa/Math.pow(BETA,2) * (3 - BETA * Ba) * Math.pow(this.localtime,2);
 			break;
 		case "s":
@@ -116,11 +116,11 @@ Branch.prototype.CalLength = function(){
 			this.len = 5 * this.localtime;
 			break;
 		case "H":
-			this.len = Aa/4 * Math.pow(this.localtime,1);///Math.pow(BETA,3) * (BETA * Ba - 2) * Math.pow(this.localtime,3)
+			this.len = Aa/7 * Math.sqrt(this.localtime);///Math.pow(BETA,3) * (BETA * Ba - 2) * Math.pow(this.localtime,3)
 						  //+ Aa/Math.pow(BETA,2) * (3 - BETA * Ba) * Math.pow(this.localtime,2);
 			break;
 	}
-	this.radium = 2 * Math.sqrt(this.localtime) * this.scale;
+	this.radium = 3 * Math.sqrt(this.localtime) * this.scale * this.scale;
 	this.len = this.len * this.scale;
 	return this.len;
 }
@@ -160,31 +160,44 @@ Branch.prototype.addChild = function(iteration,limit){
 	  		//change this.children here
 	  		case "a":
 	  			this.children.push(new Branch(this,new Word("s",LATE),this.globaltime));
+	  			this.children.push(new Branch(this,new Word("F",1),this.globaltime));
 	  			break;
 	  		case "b":
 	  			this.children.push(new Branch(this,new Word("[",0),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("b",BETA),this.globaltime));
+	  			this.children.push(new Branch(this,new Word("F",1),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("]",0),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("[",0),this.globaltime));
 				this.children.push(new Branch(this,new Word("b",BETA),this.globaltime));
+				this.children.push(new Branch(this,new Word("F",1),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("]",0),this.globaltime));
-	  			this.children.push(new Branch(this,new Word("a",LATE),this.globaltime));
+	  			this.children.push(new Branch(this,new Word("[",0),this.globaltime));
+	  			this.children.push(new Branch(this,new Word("b",BETA),this.globaltime));
+	  			this.children.push(new Branch(this,new Word("F",1),this.globaltime));
+	  			this.children.push(new Branch(this,new Word("]",0),this.globaltime));
+	  			this.children.push(new Branch(this,new Word("[",0),this.globaltime));
+				this.children.push(new Branch(this,new Word("b",BETA),this.globaltime));
+				this.children.push(new Branch(this,new Word("F",1),this.globaltime));
+	  			this.children.push(new Branch(this,new Word("]",0),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("F",1),this.globaltime));
 	  			break;
 	  		case "s":
 	  			this.children.push(new Branch(this,new Word("[",0),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("b",BETA),this.globaltime));
+	  			this.children.push(new Branch(this,new Word("F",1),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("]",0),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("[",0),this.globaltime));
 				this.children.push(new Branch(this,new Word("b",BETA),this.globaltime));
+				this.children.push(new Branch(this,new Word("F",1),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("]",0),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("[",0),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("b",BETA),this.globaltime));
+	  			this.children.push(new Branch(this,new Word("F",1),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("]",0),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("[",0),this.globaltime));
 				this.children.push(new Branch(this,new Word("b",BETA),this.globaltime));
+				this.children.push(new Branch(this,new Word("F",1),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("]",0),this.globaltime));
-	  			this.children.push(new Branch(this,new Word("a",LATE),this.globaltime));
 	  			this.children.push(new Branch(this,new Word("F",1),this.globaltime));
 	  			break;
 	  		case "F":
@@ -206,28 +219,29 @@ Branch.prototype.addChild = function(iteration,limit){
   			}
   			if(this.children !=  null){
   				var counth = 0;
+  				var countd = 0;
   				for(var i = 0 ; i < this.children.length ; i++ ){
   					
   					if(i >= 1 && this.children[i-1].type.a === "["){
-  						var d = getRandomInt(1,3);
-  						switch(d){
+  						countd++;
+  						switch(countd){
   							case 1:
   								this.children[i].Angle -= 45;
+  								this.children[i].Anxis = new THREE.Vector3(1,0,0);
   								break;
   							case 2:
   								this.children[i].Angle += 45;
+  								this.children[i].Anxis = new THREE.Vector3(0,0,1);
+  								break;
+  							case 3:
+  								this.children[i].Angle += 45;
+  								this.children[i].Anxis = new THREE.Vector3(1,0,0);
+  								break;
+  							case 4:
+  								this.children[i].Angle -= 45;
+  								this.children[i].Anxis = new THREE.Vector3(0,0,1);
   								break;
   						}
-  					 	var c = getRandomInt(1,3);
-  					 	switch(c){
-  					 		case 1:
-  					 			this.children[i].Anxis = new THREE.Vector3(1,0,0);
-  					 			break;
-  					 		case 2:
-  					 			this.children[i].Anxis = new THREE.Vector3(0,0,1);
-  					 			break;
-  					 	}
-
   					}
   					if(this.children[i].type.a === "H"){
   						counth++;
@@ -294,9 +308,9 @@ Branch.prototype.Setline = function(tree){
 			});
 			// var material2 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
 			if(this.localtime < this.type.t || this.children === null){
-				this.line = createCylinderFromEnds(material, 0 , this.radium , end , start, 16, false);
-			} else{ 
-				this.line = createCylinderFromEnds(material, this.children[0].radium, this.radium, end, start, 16, false);
+				this.line = createCylinderFromEnds(material, 0.5 * this.radium , this.radium , end , start, 16, false);
+			}
+			else{ this.line = createCylinderFromEnds(material, this.children[0].radium, this.radium, end, start, 16, false);
 			}
 		}
 			

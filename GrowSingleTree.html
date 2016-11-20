@@ -1,0 +1,69 @@
+<html>
+	<head>
+	    <meta charset="utf-8"/>
+		<title>My first Three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="js/TextureShaders.js"></script>
+		<script src="lib/three.js"></script>
+		<script src="js/particle.js"></script>
+		<script src="js/helper.js"></script>
+		<script src="js/word.js"></script>
+		<script src="js/branch.js"></script>
+		<script src="js/tree.js"></script>
+		<script src="lib/OrbitControls.js"></script>
+
+  		<script>
+  		
+            var scene = new THREE.Scene();
+            var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 2000 );
+
+			var renderer = new THREE.WebGLRenderer({ antialias: true });
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+			var control = new THREE.OrbitControls( camera, renderer.domElement );
+			
+			var renderer2 = new THREE.WebGLRenderer({ antialias: true });
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer2.domElement );
+
+            camera.position.z = 300;
+            // camera.position.y = camera.position.z/2;
+            var tr = new Tree();
+            tr.Buildtree(5);
+            var Limit = tr.timeLimit;
+            tr.tree.scale.multiplyScalar(1);
+            scene.add(tr.tree);
+            // var clock = new THREE.Clock();
+            // clock.start();
+            // var start = clock.getElapsedTime();
+
+		var render = function () {
+				requestAnimationFrame( render );
+				 // var c = clock.getElapsedTime();
+				
+				renderer.render(scene, camera);
+				
+				if(tr.time < Limit){
+						 tr.CalBranchLength(tr.time);
+						 tr.time += 0.1;
+						
+						 tr.RemoveAllBranch();
+						 tr.AddBranch();
+	 			}
+			};
+
+		
+
+			render();
+			
+  
+
+		</script>
+	</body>
+</html>
