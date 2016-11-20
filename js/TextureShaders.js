@@ -112,13 +112,14 @@ var NoiseSource = `
     }
 
     float wood(float x, float y, float z) {
-        return (1.0 + sin(sqrt(x * x + y * y) + fBm(x, y, z))) / 2.0;
+        float turbPower = 0.1;
+        return (1.0 + sin(sqrt(x * x + y * y) + turbPower * fBm(x, y, z))) / 2.0;
     }
 `;
 
 var VertexSource = `
-    varying vec2 vUv;
     varying vec3 gPosition;
+    varying vec2 vUv;
     void main() {
         vUv = uv;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1);
@@ -126,52 +127,3 @@ var VertexSource = `
         gPosition = temp.xyz / temp.w;
     }
 `;
-
-var FragmentSource = `
-    uniform float time;
-    
-    ${NoiseSource}
-
-    varying vec2 vUv;
-    varying vec3 gPosition;
-
-    void main() {
-        float x = gPosition.x / 1000.0;
-        float y = gPosition.y / 1000.0;
-        float z = gPosition.z / 1000.0;
-        // gl_FragColor = vec4(vec3((1.0 + perlin(x, y, z)) / 2.0), 1);
-        gl_FragColor = vec4(vec3(abs(perlin(x, y, z))), 1);
-    }
-`;
-
-function BallTexture() {
-
-    var octaves = 4, lacunarity = 1, gain = 0.1;
-    
-
-    var uniforms = {
-        time: { value: 1.0 },
-        octaves: { value: octaves },
-        lacunarity: { value: lacunarity },
-        gain: { value: gain}
-    }
-
-    var material = new THREE.ShaderMaterial( {
-        uniforms: uniforms,
-        vertexShader: VertexSource,
-        fragmentShader: FragmentSource
-    } );
-
-
-    // var gl = renderer.getContext();
-    // var shader = gl.createShader(gl.FRAGMENT_SHADER);
-    // gl.shaderSource(shader, FragmentSource);
-    // gl.compileShader(shader);
-    // var compiled = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
-    // console.log('Shader compiled successfully: ' + compiled);
-    // var compilationLog = gl.getShaderInfoLog(shader);
-    // console.log('Shader compiler log: ' + compilationLog);
-    // debugger;
-
-    return material;
-}

@@ -6,6 +6,7 @@ var worldWidth = 256;
 var worldHeight = 256;
 var resolution = 16;
 var scale = 5;
+var clock = new THREE.Clock();
 
 function Terrain(scene) {
 	var that = {};
@@ -13,7 +14,6 @@ function Terrain(scene) {
 	var VertexSource = `
 		uniform float time;
 
-	    varying vec2 vUv;
 	    varying vec3 gPosition;
 
 	    ${NoiseSource}
@@ -21,7 +21,6 @@ function Terrain(scene) {
 	    void main() {
 	    	float maxHeight = 1500.0;
 
-	        vUv = uv;
 	        vec4 temp = modelMatrix * vec4(position, 1);
 	        gPosition = temp.xyz / temp.w;
 	        gPosition.x += time * ${FPS * hMoveSpeed / 1000};
@@ -155,9 +154,10 @@ function Terrain(scene) {
 
 	var init = function() {
 
-		heights = that.heights = generateHeight(worldWidth, worldHeight);
-
-		geometry = new THREE.PlaneBufferGeometry(pixelWidth, pixelHeight, worldWidth - 1, worldHeight - 1);
+		heights = generateHeightMap(worldWidth, worldHeight,10);
+		// generateTimeHeightMap(width, height, interval, size, t);
+		// heights = generateTimeHeightMap(worldWidth, worldHeight, interval, )
+		geometry = new THREE.PlaneBufferGeometry(15000, 15000, worldWidth - 1, worldHeight - 1);
 		geometry.rotateX( - Math.PI / 2 );
 		geometry.rotateY(Math.PI);
 		geometry.dynamic = true;

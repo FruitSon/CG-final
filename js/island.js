@@ -1,9 +1,7 @@
-// var canvas = document.getElementById('scene');
-// var canvasCtx = canvas.getContext("2d");
+var camera, scene, light, renderer, analyzer, terrain, lantern;
+var mesh;
 
-var camera, scene, light, renderer, analyzer;
-
-var terrain, stage, tree, ball;
+var terrain, stage, tr, ball;
 
 var startTime, lastTime;
 
@@ -16,10 +14,10 @@ function init() {
 	camera.position.set(0, 10000, 0);
 	camera.rotation.x = Math.PI / 2;
 	scene = new THREE.Scene();
-	scene.fog = new THREE.Fog( 0xcce0ff, 500, 10000 );
+	// scene.fog = new THREE.Fog( 0xcce0ff, 500, 10000 );
 
 	renderer = new THREE.WebGLRenderer({ antialias: true });
-	renderer.setClearColor(0xcce0ff);
+	renderer.setClearColor(0x000000);
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.shadowMap.enabled = true;
@@ -29,14 +27,14 @@ function init() {
 	controls.update();
 
 	//light
-	light = new THREE.SpotLight(0xffffff, 1);
-	light.position.set(0, 10000, -20000);
+	light = new THREE.PointLight(0xffffff);
+	light.position.set(0, 10000, 0);
 	light.castShadow = true;
-	light.receiveShadow = true;
-	helper = new THREE.CameraHelper( light.shadow.camera );
 
-	// scene.add(helper);
 	scene.add(light);
+	scene.add(new THREE.AmbientLight(0xffff00));
+
+	
 
 	document.body.appendChild( renderer.domElement );
 	window.addEventListener( 'resize', onWindowResize, false );
@@ -51,17 +49,26 @@ function init() {
 
 	stage = Stage();
 	stage.mesh.translateY(1500);
-	stage.mesh.translateZ(1000);
 	scene.add(stage.mesh);
 
 	ball = Ball();
-	ball.mesh.translateY(2000);
+	ball.mesh.translateX(3000);
+	ball.mesh.translateY(3000);
 	scene.add(ball.mesh);
 
-	tree = DrawTree();
-	tree.translateY(1500);
-	tree.translateZ(1000);
-	scene.add(tree);
+	// tree = DrawTree();
+	// tree.translateY(1500);
+	// tree.translateZ(1000);
+	// scene.add(tree);
+
+	lantern = Lantern(camera,scene,renderer,10);
+	
+	tr = new Tree();
+	tr.Buildtree(6);
+	tr.tree.translateY(1500);
+
+	tr.tree.scale.multiplyScalar(30);
+	scene.add(tr.tree);
 
 	startTime = Date.now();
 	lastTime = startTime;
@@ -79,12 +86,17 @@ function render() {
 	var currentTime = Date.now();
 	if (currentTime - lastTime >= 1000 / FPS) {
 		lastTime = currentTime;
-		// rotate
-		// mesh.rotation.x += 0.005;
-		// mesh.rotation.y += 0.01;
-		// terrain.updateData();
+
 		terrain.uniforms['time'].value = Date.now() - startTime;
-		
+
+		if(tr.time < tr.timeLimit){
+	 		tr.CalBranchLength(tr.time);
+	 		tr.time = (currentTime - startTime) / 1000;
+	 		tr.RemoveAllBranch();
+	 		tr.AddBranch();
+		}
+
+		lantern.update();
 		renderer.render( scene, camera );
 		// draw();
 	}

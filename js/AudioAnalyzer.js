@@ -7,6 +7,7 @@ function AudioAnalyzer(url) {
 			var bufferLength = analyzer.frequencyBinCount;
 			audioData = new Uint8Array(bufferLength);
 			analyzer.getByteTimeDomainData(audioData);
+			console.log(audioData);
 			return audioData;
 		}
 	  //   analyser.fftSize = 256;
