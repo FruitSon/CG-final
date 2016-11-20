@@ -1,4 +1,4 @@
-function Lantern(camera,scene,renderer,num) {
+function Lantern(camera) {
 	var that = {};
 	var vertexSource = `
 		uniform vec3 viewVector;
@@ -27,14 +27,35 @@ function Lantern(camera,scene,renderer,num) {
 
 	//update the uniforms when the camera rotate
 	var update = that.update = function() {
-		for(var i = 0; i < glowbuffer.length; i ++){
-			glowbuffer[i].material.uniforms.viewVector.value = 
-			new THREE.Vector3().subVectors( camera.position, glowbuffer[i].position);
-		}
+		lanternGlow.material.uniforms.viewVector.value = 
+		new THREE.Vector3().subVectors( camera.position, lanternGlow.position);
 
+		// life --;
+		// if (life == 0) {
+		// 	return true;
+		// }
+
+		// var lvs = lantern.geometry.vertices;
+		// for(var i = 0; i < lvs.length; i ++) {
+		// 	lvs[i].x += speed[0];
+		// 	lvs[i].y += speed[1];
+		// 	lvs[i].z += speed[2];
+		// }
+		
+		// var lgvs = lanternGlow.geometry.vertices;
+		// for(var i = 0; i < lgvs.length; i ++) {
+		// 	lgvs[i].x += speed[0];
+		// 	lgvs[i].y += speed[1];
+		// 	lgvs[i].z += speed[2];
+		// }
+		
+		// lantern.geometry.verticesNeedUpdate = true;
+		// lanternGlow.geometry.verticesNeedUpdate = true;
+
+		// return false;
 	}
 
-	var generateLights = function (camera,scene,renderer,num){
+	var generateLights = function (camera){
 		//set Up
 		lanternMaterial = new THREE.MeshPhongMaterial({ color:0xff7700});
 		lanternTexture = THREE.TextureLoader('img/lanternTexture.jpg');
@@ -44,7 +65,6 @@ function Lantern(camera,scene,renderer,num) {
 
 		//subdivision
 		modifier = new THREE.SubdivisionModifier(1);
-		modifier.supportUVs = false;
 		modifier.modify(lanternGlowGeo);
 		lantern = new THREE.Mesh(lanternGeo, lanternMaterial);
 
@@ -62,22 +82,17 @@ function Lantern(camera,scene,renderer,num) {
 			blending : THREE.AdditiveBlending
 		});
 
-		//generate #num lanterns
-		for(var i = 0; i < 20; i++){
-			var p = generateInitialPosition();
-			var s = Math.random();
-			var t_lantern = lantern.clone();
-			// var t_lanternGlow = new THREE.Mesh( lanternGlowGeo.clone(), new THREE.MeshBasicMaterial({color: 0xffff00}));
-			var t_lanternGlow = new THREE.Mesh( lanternGlowGeo.clone(), shaderMaterial);
-			t_lantern.position.set(p.x,p.y,p.z);
-			t_lanternGlow.position.set(p.x,p.y,p.z);
-			t_lantern.scale.multiplyScalar(s);
-			t_lanternGlow.scale.multiplyScalar(s*2);
-			scene.add(t_lantern);
-			scene.add(t_lanternGlow);
-			glowbuffer.push(t_lanternGlow);
-		}
+		
+		var s = Math.random();
+		lanternGlow = new THREE.Mesh( lanternGlowGeo, shaderMaterial);
+		lantern.position.set(initPosition[0], initPosition[1], initPosition[2]);
+		lanternGlow.position.set(initPosition[0], initPosition[1], initPosition[2]);
+		lantern.scale.multiplyScalar(s);
+		lanternGlow.scale.multiplyScalar(s*2);
 
+		mesh = that.mesh = new THREE.Object3D();
+		mesh.add(lantern);
+		mesh.add(lanternGlow);
 	}
 
 	/**
@@ -85,22 +100,25 @@ function Lantern(camera,scene,renderer,num) {
 	 *
 	 * @return     {Object}  { the x,y,z coordinate}
 	 */
-	var generateInitialPosition = function() {
-		var x = 0 + (1-Math.random()*2)*8000;
-		var y = 0 + (1-Math.random()*2)*8000;
-		var z = 0+(1-Math.random()*2)*1000;
-		return {'x':x, 'y':y, 'z':z};
+	var randomPosition = function() {
+		var x = 0 + (1 - 2 * Math.random())*10000;
+		var y = 0 + (1 - 2 * Math.random())*5000;
+		var z = 0 + (1 - 2 * Math.random())*10000;
+		return [x, y, z];
 	}
 
-	var count = 0, single, singleGlow;
-	var amp = 300;
-
-	var lantern, lanternGeo, lanternMaterial, glowGeo;
+	var lantern, lanternGlow, initPosition, finalPosition, mesh, life = FPS * Math.random() * 100, speed;
 	var modifier;
-	var glowbuffer = [];
 
 	var init = function() {
-		generateLights(camera,scene,renderer,num);
+		initPosition = randomPosition();
+		finalPosition = randomPosition();
+		speed = [
+			(finalPosition[0] - initPosition[0]) / life,
+			(finalPosition[1] - initPosition[1]) / life,
+			(finalPosition[2] - initPosition[2]) / life
+		];
+		generateLights(camera);
 		return that;
 	}
 

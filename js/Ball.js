@@ -20,7 +20,7 @@ function Ball() {
 
 	        float value = wood(x, y, z);
 
-	        gl_FragColor = vec4(r + value, g + value, b, 1);
+	        gl_FragColor = vec4(r + value, g + value, b, 0.5);
 	    }
 	`;
 
