@@ -1,3 +1,9 @@
+/**
+ * contains the function to render the background environment
+ *
+ * @class      Sky (name)
+ * @return     {<type>}  return the generated mesh
+ */
 var skyVertexShader = `
 	varying vec2 vUV;
 	void main(){

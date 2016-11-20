@@ -1,21 +1,44 @@
+/**
+ * This class includes functions to generate height map data, 
+ * which will be used as height of the terrain.
+ * reference: https://en.wikipedia.org/wiki/Perlin_noise
+ * reference: http://flafla2.github.io/2014/08/09/perlinnoise.html
+ * reference: Texturing and Modeling: Chapter7 Procedural modeling of gases
+ */
+  
+/* Generate perlin noise for the heightmap
+ * @param      {num}    width   The width of the rendering area.
+ * @param      {num}    height  The height of the rendering area.
+ * @param      {num}    size    The size of the tile.
+ * @return     {array}  one array save the height data for all pixels
+ */
+
 function generateHeightMap(width, height, size) {
 		var influence = perlinNoise(width, height, size);
 		return influence;
 }
 
+/* Generate simplex noise for the heightmap according to the time
+ * @param      {num}    width      The width of the rendering area.
+ * @param      {num}    height     The height of the rendering area.
+ * @param      {num}    interval   The time interval.
+ * @param      {num}    size       The size of the tile.
+ * @param      {num}    t    	   The real-time time. 
+ * @return     {array}  one array save the height data for all pixels
+ */
 function generateTimeHeightMap(width, height, interval, size, t) {
 		var influence = [];
 		var z = t*size/interval;
 		perlinNoise3D(width, height, influence, z);
 		return influence;
 }
-	/**
-	 * function to generate perlinNoise
-	 *
-	 * @param      {int}  width      The width
-	 * @param      {int}  height     The height
-	 * @param      {array}  influence  The returned value
-	 */
+/**
+ * helper function to generate perlinNoise
+ *
+ * @param      {int}  width      The width
+ * @param      {int}  height     The height
+ * @param      {array}  influence  The returned value
+ */
 function perlinNoise(width, height, size) {
 	var scaleW = width/(size-1);
 	var scaleH = height/(size-1);
@@ -72,14 +95,8 @@ function perlinNoise(width, height, size) {
 
 
 /**
- * { A function to generate time-coherent perlin noise }
- *
- * @param      {number}  width      The width
- * @param      {number}  height     The height
- * @param      {Array}  influence  The influence
- * @param      {date}  time       The time
+ * helper function to generate simplex noise
  */
-//not functional
 function perlinNoise3D(width,height,interval,influence,z){
 	var scaleW = width/size;
 	var scaleH = height/size;
@@ -179,11 +196,7 @@ function perlinNoise3D(width,height,interval,influence,z){
 }
 
 /**
- * { A function to initialize the perm and gradient array }
- *
- * @param      {Array}   perm      The permission
- * @param      {Array}   gradient  The gradient
- * @param      {number}  size      The number of points on each edge
+ * function to initialize the perm and gradient array for 2D perlin noise
  */
 function perlinInitialize(perm, gradient, size) {
 	//initialize permutation
@@ -204,6 +217,9 @@ function perlinInitialize(perm, gradient, size) {
 	}
 }
 
+/**
+ * function to initialize the perm and gradient array for 3D perlin noise
+ */
 function perlin3DInitialize(perm, gradient, size){
 	for(var i = 0; i < size ; i++){
 		perm.push(i);
@@ -215,6 +231,7 @@ function perlin3DInitialize(perm, gradient, size){
 		perm[i] = perm[r];
 	}
 }
+
 
 function getCorner(x, y) {
 	var l = Math.floor(x);

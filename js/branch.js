@@ -39,11 +39,11 @@ Branch.prototype.FragmentSource = `
         float y = gPosition.y / 1000.0;
         float z = gPosition.z / 1000.0;
 
-        float r = 80.0;
-        float g = 30.0;
-        float b = 30.0;
+        float r = 82.0 / 256.0;
+        float g = 30.0 / 256.0;
+        float b = 14.0 / 256.0;
 
-        float value = wood(vUv.x, vUv.y, 71.0);
+        float value = mod(wood(vUv.x, vUv.y, 71.0), 20.0 / 256.0);
 
         gl_FragColor = vec4(r + value, g + value, b, 1);
     }
@@ -284,14 +284,14 @@ Branch.prototype.Setline = function(tree){
 			// geometry.vertices.push(start,end);
 			// this.line = new THREE.LineSegments( geometry, material );
 
-			var material = new THREE.MeshBasicMaterial( branchcolor );
-			// var material = new THREE.ShaderMaterial({
-			// 	uniforms:{
-			// 		time: { value: 1.0 }
-			// 	},
-			// 	vertexShader : VertexSource,
-			// 	fragmentShader : this.FragmentSource
-			// });
+			// var material = new THREE.MeshBasicMaterial( branchcolor );
+			var material = new THREE.ShaderMaterial({
+				uniforms:{
+					time: { value: 1.0 }
+				},
+				vertexShader : VertexSource,
+				fragmentShader : this.FragmentSource
+			});
 			// var material2 = new THREE.MeshBasicMaterial( {color: 0xffff00} );
 			if(this.localtime < this.type.t || this.children === null){
 				this.line = createCylinderFromEnds(material, 0 , this.radium , end , start, 16, false);

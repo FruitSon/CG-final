@@ -112,8 +112,16 @@ var NoiseSource = `
     }
 
     float wood(float x, float y, float z) {
-        float turbPower = 0.1;
-        return (1.0 + sin(sqrt(x * x + y * y) + turbPower * fBm(x, y, z))) / 2.0;
+        float size = 1.0;
+        float turbPower = 0.2;
+        float ringn = 1.0;
+
+        x = mod(x, size);
+        y = mod(y, size);
+
+        float disv = sqrt(x * x + y * y) + turbPower * fBm(x, y, z);
+        float sinv = sin(2.0 * ringn * disv * 3.14159) / 2.0;
+        return sinv;
     }
 `;
 

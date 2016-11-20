@@ -4,10 +4,9 @@ function AudioAnalyzer(url) {
 	var analyze = that.analyze = function() {
 		if (finished === true) {
 			analyzer.fftSize = 2048;
-			var bufferLength = analyzer.frequencyBinCount;
+			var bufferLength = analyzer.fftSize;
 			audioData = new Uint8Array(bufferLength);
 			analyzer.getByteTimeDomainData(audioData);
-			console.log(audioData);
 			return audioData;
 		}
 	  //   analyser.fftSize = 256;
@@ -70,7 +69,7 @@ function AudioAnalyzer(url) {
 		analyzer = context.createAnalyser();
 		source.connect(analyzer);
 
-		analyzer.connect(context.destination);
+		// analyzer.connect(context.destination);
 		source.start(0);
 
 		finished = true;
